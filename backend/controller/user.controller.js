@@ -1,4 +1,5 @@
 import { User } from "../models/user.model.js";
+import { BlacklistToken } from "../models/blacklistTokes.model.js";
 import { validationResult } from "express-validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -81,6 +82,8 @@ export const login = async (req, res) => {
       expiresIn: "1d",
     });
 
+    res.cookie("token" , token)
+
     // Respond with success
     res.status(200).json({
       success: true,
@@ -98,4 +101,28 @@ export const login = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+export const getUserProfile = async (req, res) => {
+
+  res.status(200).json({
+    success: true,
+    user: req.user,
+  });
+    
+};
+
+export const logout = async (req , res) => {
+  const token = req.headers["authorization"]?.split(" ")[1] || req.cookies.token;
+  res.clearCookie("token")
+
+  //blackist the token in the database
+
+  await BlacklistToken.create({ token });
+
+
+  res.status(200).json({
+    success: true,
+    message: "User logged out successfully",
+  });
+}
 
