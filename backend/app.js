@@ -3,6 +3,7 @@ import cors from 'cors';
 import connectDB from "./config/db.js";
 
 import userRoutes from "./routes/user.routes.js"
+import captainRoutes from "./routes/captain.routes.js";
 
 connectDB();
 
@@ -20,6 +21,7 @@ app.get('/' , (req , res) => {
 })
 
 app.use('/api/user' , userRoutes );
+app.use('/api/captain' , captainRoutes );
 
 
 export default app;
