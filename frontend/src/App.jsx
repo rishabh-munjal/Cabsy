@@ -23,6 +23,7 @@ const App = () => {
         <Route path='/landing' element={<UserProtectionWrapper><Landing/></UserProtectionWrapper>} />
         <Route path='/user/logout' element={<UserProtectionWrapper><UserLogout/></UserProtectionWrapper>} />
         <Route path='/captain-landing' element={<CaptainProtectionWrapper><CaptainLanding/></CaptainProtectionWrapper>}/>
+        <Route path='/captain/logout' element={<CaptainProtectionWrapper><UserLogout/></CaptainProtectionWrapper>} />
       </Routes>
     </>
   )
