@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState , useContext} from 'react';
 import { Link } from 'react-router-dom';
+import { CaptainDataContext } from '../context/CaptainContext';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const CaptainSignup = () => {
     const [fullname, setFullname] = useState({ firstname: '', lastname: '' });
@@ -12,7 +15,11 @@ const CaptainSignup = () => {
         type: '',
     });
 
-    const submitHandler = (e) => {
+    const { captain, setCaptain } = useContext(CaptainDataContext);
+
+    const navigate = useNavigate();
+
+    const submitHandler = async (e) => {
         e.preventDefault();
 
         const newCaptain = {
@@ -21,7 +28,7 @@ const CaptainSignup = () => {
                 lastname: fullname.lastname,
             },
             email,
-            password: password, // Hash before sending to backend
+            password: password, 
             vehicle: {
                 color: vehicle.color,
                 plate: vehicle.plate,
@@ -30,7 +37,24 @@ const CaptainSignup = () => {
             },
         };
 
-        console.log('Captain Signup Data:', newCaptain);
+       // console.log('Captain Signup Data:', newCaptain);
+
+        const respone = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/captain/register` , newCaptain);
+
+        //console.log(respone.data);
+
+        if(respone.status === 201){
+            const data = respone.data;
+
+            setCaptain(data);
+            localStorage.setItem("token" , data.token);
+
+            // console.log("inn");
+            navigate('/captain-landing');
+
+        }
+
+
 
         // Reset form
         setFullname({ firstname: '', lastname: '' });
