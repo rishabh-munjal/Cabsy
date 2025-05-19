@@ -1,0 +1,80 @@
+import React from 'react';
+import taxiIcon from '../assets/taxi.png'; // Replace with your taxi icon path
+import { FaMapMarkerAlt, FaMoneyBillAlt, FaCarAlt, FaPhoneAlt } from 'react-icons/fa';
+
+const Riding = () => {
+    const rideDetails = {
+        name: "Rahul Sharam",
+        image: taxiIcon, // car icon
+        rating: 4.8,
+        phone: "+91 796546839",
+        vehicle: "Maruti Suzuki Alto",
+        numberPlate: "MP04 AB 1234",
+        price: "₹193.20",
+        source: "562/11-A, Kankariya Talab, Bhopal",
+        paymentMode: "Cash"
+    };
+
+    return (
+        <div className="relative h-screen w-full bg-gray-100">
+            {/* Top Bar */}
+            <div className="absolute top-0 w-full flex justify-between items-baseline p-4 z-10">
+                <h1 style = {{fontFamily: 'Quantico, sans-serif'}} className='text-3xl text-black font-extrabold tracking-wide'>Cabsy</h1>
+                <button className="text-gray-800 font-medium px-3 py-1 rounded-md border border-gray-300 hover:bg-gray-200 text-sm">
+                    Support
+                </button>
+            </div>
+
+            {/* Map Placeholder */}
+            <div className="h-[63%] w-full bg-grey-300 m-0 flex items-center justify-center text-gray-700">
+                {/* Replace with actual Google Map */}
+                <p>Live Map Tracking...</p>
+            </div>
+
+            {/* Bottom Sheet */}
+            <div className="absolute bottom-0 left-0 w-full m-0 bg-white  shadow-lg p-6">
+                {/* Driver Info */}
+                <div className="flex items-center gap-4 mb-5">
+                    <img
+                        src={rideDetails.image}
+                        alt="Vehicle"
+                        className="w-18 h-18 object-contain"
+                    />
+                    <div>
+                        <p className="text-gray-600 text-sm">Driver</p>
+                        <p className="text-lg font-bold">{rideDetails.name}</p>
+                        <p className="text-sm text-gray-500">{rideDetails.phone}</p>
+                    </div>
+                    <div className="ml-auto flex items-center space-x-2">
+                        <FaCarAlt className="text-gray-600 text-xl" />
+                        <div>
+                            <p className="font-semibold">{rideDetails.numberPlate}</p>
+                            <p className="text-sm text-gray-500">{rideDetails.vehicle}</p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Source Address */}
+                <div className="flex items-center gap-3 mb-3">
+                    <FaMapMarkerAlt />
+                    <p className="text-sm font-medium text-gray-700">{rideDetails.source}</p>
+                </div>
+
+                {/* Fare Info */}
+                <div className="flex items-center gap-3 mb-6">
+                    <FaMoneyBillAlt  />
+                    <p className="text-sm font-medium text-gray-700">
+                        {rideDetails.price} <span className="text-gray-500">({rideDetails.paymentMode})</span>
+                    </p>
+                </div>
+
+                {/* Payment Button */}
+                <button className="w-full cursor-pointer bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3 rounded-lg text-lg">
+                    Make a Payment
+                </button>
+            </div>
+        </div>
+    );
+};
+
+export default Riding;
