@@ -5,6 +5,7 @@ import connectDB from "./config/db.js";
 import userRoutes from "./routes/user.routes.js"
 import captainRoutes from "./routes/captain.routes.js";
 import mapsRoutes from "./routes/maps.routes.js";
+import rideRoutes from "./routes/ride.route.js";
 
 connectDB();
 
@@ -24,6 +25,7 @@ app.get('/' , (req , res) => {
 app.use('/api/user' , userRoutes );
 app.use('/api/captain' , captainRoutes );
 app.use('/api/maps' , mapsRoutes );
+app.use('/api/ride' , rideRoutes);
 
 
 export default app;
