@@ -2,7 +2,7 @@ import { Ride } from "../models/ride.model.js";
 import { getDistanceTime } from "./maps.service.js";
 import crypto from 'crypto';
 
-async function getFare(pickup , distance){
+export const getFare = async(pickup , distance)=>{
 
     if(!pickup || !distance){
         throw new Error("Pickup and distance are required");
@@ -41,13 +41,12 @@ async function getFare(pickup , distance){
 
 }
 
-function getOTP(num) {
-    // Ensure num is 4 for 4-digit OTP
-    const min = Math.pow(10, num - 1); // 1000 for 4 digits
-    const max = Math.pow(10, num) - 1; // 9999 for 4 digits
-    const otp = crypto.randomInt(min, max + 1).toString();
+function getOTP(num){
+
+    const otp = crypto.randomInt(100000 , 999999).toString();
     console.log(otp);
     return otp;
+
 }
 
 export const createRide = async({
