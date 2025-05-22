@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useContext } from "react";
 import { LogOut } from "lucide-react";
 import {
   FaClock,
@@ -8,11 +8,13 @@ import {
 
 import RideRequestModal from "../components/RideRequestModal";
 import { useNavigate } from "react-router-dom";
+import { CaptainDataContext } from "../context/CaptainContext";
 
 const CaptainLanding = () => {
   const [showRideRequest, setShowRideRequest] = useState(true);
 
   const navigate = useNavigate();
+  const {captain } = useContext(CaptainDataContext);
 
   const rideDetails = {
     pickup: "21, MG Road, Bangalore",
@@ -23,7 +25,7 @@ const CaptainLanding = () => {
   };
 
   const stats = {
-    name: "Sarthak",
+    name: (captain.captain.fullname.firstname) + " " + captain.captain.fullname.lastname,
     earnings: "₹1,450.00",
     online1: "4.2",
     online2: "4.2",
@@ -33,6 +35,7 @@ const CaptainLanding = () => {
   return (
     <div className="h-screen font-sans bg-[#f9fafb] text-black flex flex-col">
       {/* Top Map Area */}
+      {console.log(captain.captain.fullname.firstname)}
       <div className="relative h-[60%] w-full bg-gray-200">
         {/* Header */}
         <div className="absolute top-0 left-0 right-0 px-4 py-3 flex items-center justify-between z-10">
@@ -67,7 +70,7 @@ const CaptainLanding = () => {
               />
             </div>
             <div>
-              <p className="text-lg font-semibold">{stats.name}</p>
+              <p className="text-lg font-semibold text-transform : capitalize">{stats.name}</p>
               <span className="text-xs text-green-500 font-medium">
                 Online ●
               </span>

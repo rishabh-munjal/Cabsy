@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MapPin, ArrowRight, LogOut, X, UserRound } from 'lucide-react';
 import taxiIcon from '../assets/taxi.png';
 import motoIcon from '../assets/moto.png';
 import autoIcon from '../assets/auto.png';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+
+import { SocketContext } from '../context/SocketContext';
 
 // const rideOptions = [
 //     {
@@ -68,6 +70,15 @@ const Landing = () => {
     const [sourceSuggestions, setSourceSuggestions] = useState([]);
     const [destinationSuggestions, setDestinationSuggestions] = useState([]);
     const [focusedInput, setFocusedInput] = useState(null);
+
+    const { sendMessage , receiveMessage } = React.useContext(SocketContext);
+
+    useEffect(() => {
+      
+    
+      sendMessage("join" , {userType : "User" , userId : localStorage.getItem('userId')})
+    }, [third])
+    
 
     // Helper to fetch suggestions
     const fetchSuggestions = async (input, setSuggestions) => {
