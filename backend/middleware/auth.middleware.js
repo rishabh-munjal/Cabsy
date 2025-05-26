@@ -21,6 +21,7 @@ export const authUser = async (req, res, next) => {
             }
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
             req.user = await User.findById(decoded._id).select("-password");//req me user ki details attach karde
+            
             return next();
         } catch (error) {
             return res.status(401).json({message : "Unauthorized"});
@@ -41,6 +42,7 @@ export const authCaptain = async (req , res , next) => {
             }
     
             const decoded = jwt.verify(token , process.env.JWT_SECRET);
+            console.log("CAPTAIN MIDDEWARE",  await Captain.findById(decoded._id).select("-password"))
             req.captain = await Captain.findById(decoded._id).select("-password");
 
             return next();

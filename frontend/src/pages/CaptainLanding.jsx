@@ -10,23 +10,24 @@ import RideRequestModal from "../components/RideRequestModal";
 import { useNavigate } from "react-router-dom";
 import { CaptainDataContext } from "../context/CaptainContext";
 import { SocketContext } from "../context/SocketContext";
+import axios from 'axios'
 
 const CaptainLanding = () => {
   const [showRideRequest, setShowRideRequest] = useState(false);
 
   const [ride, setRide] = React.useState({
-  _id: "",
-  user: {
     _id: "",
-    firstname: "",
-    email: "",
-    // add other user fields if needed
-  },
-  pickup: "",
-  destination: "",
-  fare: 0,
-  status: "", // e.g. "pending"
-});
+    user: {
+      _id: "",
+      firstname: "",
+      email: "",
+      // add other user fields if needed
+    },
+    pickup: "",
+    destination: "",
+    fare: 0,
+    status: "", // e.g. "pending"
+  });
 
 
   const navigate = useNavigate();
@@ -76,7 +77,7 @@ const CaptainLanding = () => {
       setShowRideRequest(true);
 
       setRide(data);
-      
+
     });
 
     return () => {
@@ -179,15 +180,32 @@ const CaptainLanding = () => {
       {/* Ride Request Modal */}
       <RideRequestModal
         visible={showRideRequest}
-        onAccept={() => {
+        onAccept={async () => {
           setShowRideRequest(false);
           console.log("Ride Accepted");
-          navigate("/captain-riding");
+
+          // console.log(ride._id);
+
+          try {
+            const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/ride/confirm`, {
+              rideId: ride._id,
+              
+            }, 
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            });
+            console.log("Response:", response);
+            navigate("/captain-riding");
+          } catch (error) {
+            console.error("Error confirming ride:", error.response?.data || error.message);
+          }
         }}
         onIgnore={() => {
           setShowRideRequest(false);
           console.log("Ride Ignored");
-        }}  
+        }}
         rideDetails={ride}
       />
     </div>

@@ -10,6 +10,7 @@ import { SocketContext } from '../context/SocketContext';
 import { useContext } from 'react';
 import { UserDataContext } from '../context/UserContext';
 
+
 // const rideOptions = [
 //     {
 //         type: 'Car',
@@ -40,10 +41,7 @@ const Landing = () => {
     const [showFormFull, setShowFormFull] = useState(false);
     const [showRides, setShowRides] = useState(false);
     const [findingDriver, setFindingDriver] = useState(false);
-    const [driverAssigned, setDriverAssigned] = useState(null);
-    const [selectedRide, setSelectedRide] = useState(null);
 
-    //Ride options
     const [rideOptions, setRideOptions] = useState([
         {
             type: 'Auto',
@@ -67,6 +65,18 @@ const Landing = () => {
             tagline: 'Quick and agile rides',
         }
     ])
+    const [driverAssigned, setDriverAssigned] = useState(null);
+    const [selectedRide, setSelectedRide] = useState(null);
+
+    //Ride options
+        //     name: 'Rahul Singh',
+        // vehicle: rideOptions.type,
+        // price: rideOptions.price,
+        // numberPlate: 'DL3CAX1234',
+        // phone: '+91 9876543210',
+        // rating: '4.8',
+        // image: 'https://randomuser.me/api/portraits/men/32.jpg',
+    
 
     // NEW: Suggestion states
     const [sourceSuggestions, setSourceSuggestions] = useState([]);
@@ -74,19 +84,21 @@ const Landing = () => {
     const [focusedInput, setFocusedInput] = useState(null);
 
     const { socket } = React.useContext(SocketContext);
-    const {user} = React.useContext(UserDataContext);
+    const { user } = React.useContext(UserDataContext);
 
     useEffect(() => {
 
-    
-      
-    console.log(user);
-    if(user != null){
 
-        socket.emit   ("join" , {userType : "User" , userId : user._id })
-    }
-    }, [user , socket])
-    
+
+        console.log(user);
+        if (user != null) {
+
+            socket.emit("join", { userType: "User", userId: user._id })
+        }
+    }, [user, socket])
+
+
+
 
     // Helper to fetch suggestions
     const fetchSuggestions = async (input, setSuggestions) => {
@@ -123,91 +135,93 @@ const Landing = () => {
         fetchSuggestions(val, setDestinationSuggestions);
     };
 
-const handleSubmit = async (e) => {
-    e.preventDefault();
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-    console.log('Source:', source);
-    console.log('Destination:', destination);
+        console.log('Source:', source);
+        console.log('Destination:', destination);
 
-    try {
-        const fare = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/ride/get-fare`, {
-            params: { pickup: source, destination },
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-            }
-        });
+        try {
+            const fare = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/ride/get-fare`, {
+                params: { pickup: source, destination },
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                }
+            });
 
-        console.log(fare.data);
+            console.log(fare.data);
 
-        // Update ride options with correct price from fare data
-        setRideOptions((prevOptions) =>
-            prevOptions.map((option) => {
-                const key = option.type.toLowerCase(); // match "Auto" with "auto"
-                const updatedPrice = fare.data[key];
-                return {
-                    ...option,
-                    price: updatedPrice !== undefined ? `₹${updatedPrice.toFixed(2)}` : '₹--',
-                };
-            })
-        );
+            // Update ride options with correct price from fare data
+            setRideOptions((prevOptions) =>
+                prevOptions.map((option) => {
+                    const key = option.type.toLowerCase(); // match "Auto" with "auto"
+                    const updatedPrice = fare.data[key];
+                    return {
+                        ...option,
+                        price: updatedPrice !== undefined ? `₹${updatedPrice.toFixed(2)}` : '₹--',
+                    };
+                })
+            );
 
-        setShowFormFull(false);
-        setShowRides(true);
-    } catch (error) {
-        console.error('Error fetching fare:', error);
-        alert('Failed to fetch fare. Please try again.');
-    }
-};
+            setShowFormFull(false);
+            setShowRides(true);
+        } catch (error) {
+            console.error('Error fetching fare:', error);
+            alert('Failed to fetch fare. Please try again.');
+        }
+    };
 
 
     const handleLogout = () => {
         console.log('User logged out');
     };
 
-const handleRideSelect = (ride) => {
-    setSelectedRide(ride);
-    setShowRides(false);
-    setFindingDriver(true);
+    const handleRideSelect = async (ride) => {
+        setSelectedRide(ride);
+        setShowRides(false);
+        setFindingDriver(true);
 
-    setTimeout(() => {
-        (async () => {
-            setFindingDriver(false);
 
-            try {
-                const response = await axios.post(
-                    `${import.meta.env.VITE_BASE_URL}/api/ride/create`,
-                    {
-                        pickup: source,
-                        destination: destination,
-                        vehicleType: ride.type,
-                    },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem('token')}`,
-                        }
+
+        try {
+            const response = await axios.post(
+                `${import.meta.env.VITE_BASE_URL}/api/ride/create`,
+                {
+                    pickup: source,
+                    destination: destination,
+                    vehicleType: ride.type,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
                     }
-                );
+                }
+            );
 
-                console.log('Ride created:', response.data);
 
-                setDriverAssigned({
-                    name: 'Rahul Singh',
-                    vehicle: ride.type,
-                    price: ride.price,
-                    numberPlate: 'DL3CAX1234',
-                    phone: '+91 9876543210',
-                    rating: '4.8',
-                    image: 'https://randomuser.me/api/portraits/men/32.jpg',
-                });
-            } catch (error) {
-                console.error('Failed to create ride:', error);
-                alert('Failed to assign a driver. Please try again.');
-                setFindingDriver(false);
-            }
-        })();
-    }, 25000);
-};
 
+
+
+        } catch (error) {
+            console.error('Failed to create ride:', error);
+            alert('Failed to assign a driver. Please try again.');
+            setFindingDriver(false);
+        }
+
+    };
+
+        socket.on('ride-confirmed', (data) => {
+        console.log(data);
+        setFindingDriver(false);
+        setDriverAssigned(data);
+        
+    })
+
+    useEffect(() => {
+  if (driverAssigned) {
+    console.log("DRIVER ASSIGNED" , driverAssigned);
+  }
+}, [driverAssigned]);
 
     return (
         <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-gray-200 relative overflow-hidden">
@@ -314,7 +328,7 @@ const handleRideSelect = (ride) => {
                     >
                         Find Ride <ArrowRight className="w-5 h-5" />
                     </button>
-                </form> 
+                </form>
             </div>
 
             {/* Quick Access Form */}
@@ -411,18 +425,19 @@ const handleRideSelect = (ride) => {
                                 <X className="w-5 h-5 text-gray-500 hover:text-black" />
                             </button>
                         </div>
+                        
                         <div className="flex items-center gap-4 mb-4">
                             <img src={driverAssigned.image} alt="Driver" className="w-16 h-16 rounded-full" />
                             <div>
-                                <h3 className="text-lg font-semibold">{driverAssigned.name}</h3>
-                                <p className="text-gray-600 text-sm">⭐ {driverAssigned.rating} Rating</p>
-                                <p className="text-gray-600 text-sm">📞 {driverAssigned.phone}</p>
+                                <h3 className="text-lg font-semibold">{driverAssigned?.captain.fullname.firstname}</h3>
+                                <p className="text-gray-600 text-sm">⭐ 4.6 Rating</p>
+                                <p className="text-gray-600 text-sm">📞 +91 9876787656</p>
                             </div>
                         </div>
                         <div className="mt-4 space-y-2">
-                            <p><strong>Vehicle:</strong> {driverAssigned.vehicle}</p>
-                            <p><strong>Number Plate:</strong> {driverAssigned.numberPlate}</p>
-                            <p><strong>Estimated Fare:</strong> {driverAssigned.price}</p>
+                            <p><strong>Vehicle:</strong> {driverAssigned?.captain.vehicle.type}</p>
+                            <p><strong>Number Plate:</strong> {driverAssigned?.captain.vehicle.plate}</p>
+                            <p><strong>Estimated Fare:</strong> {driverAssigned.fare}</p>
                         </div>
                         <Link
                             to="/riding"

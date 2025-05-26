@@ -73,3 +73,25 @@ export const createRide = async({
 
     return ride;
 }
+
+export const confirmRide = async(rideId , captainId) => {
+    if(!rideId || !captainId){
+        throw new Error("Ride ID and Captain ID are required");
+    }
+
+
+    await Ride.findOneAndUpdate({_id : rideId} , {status : "accepted" , captain : captainId} );
+
+
+    const ride = await Ride.findById(rideId)
+  .populate("user")
+  .populate("captain").select("+otp");
+
+
+
+    if(!ride){
+        throw new Error("Ride not found");
+    }
+
+    return ride;
+}

@@ -1,6 +1,6 @@
 import { createRide } from "../services/ride.service.js";
 import { validationResult } from "express-validator";
-import { getFare } from "../services/ride.service.js";
+import { getFare , confirmRide } from "../services/ride.service.js";
 import {
   getAddressCoordinate,
   getCaptainsInTheRadius,
@@ -91,3 +91,32 @@ export const getFareController = async (req, res) => {
     }
   }
 };
+
+export const confirmRideController = async (req, res) => {
+    const error = validationResult(req);
+
+    if(!error.isEmpty()){
+        return res.status(400).json({error : error.array()});
+    }
+
+
+    const {rideId} = req.body;
+
+    try {
+
+        const ride = await confirmRide(rideId , req.captain._id);
+
+        sendMessageToSocketId(ride.user.socketId , {
+            event : "ride-confirmed",
+            data : ride
+        })
+        return res.status(200).json(ride);
+        
+    } catch (error) {
+
+        console.log(error);
+
+        return res.status(500).json({message : "Internal Server Error"});
+        
+    }
+}
