@@ -1,4 +1,4 @@
-import React, { useState , useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { LogOut } from "lucide-react";
 import {
   FaClock,
@@ -9,23 +9,98 @@ import {
 import RideRequestModal from "../components/RideRequestModal";
 import { useNavigate } from "react-router-dom";
 import { CaptainDataContext } from "../context/CaptainContext";
+import { SocketContext } from "../context/SocketContext";
 
 const CaptainLanding = () => {
-  const [showRideRequest, setShowRideRequest] = useState(true);
+  const [showRideRequest, setShowRideRequest] = useState(false);
+
+  const [ride, setRide] = React.useState({
+  _id: "",
+  user: {
+    _id: "",
+    firstname: "",
+    email: "",
+    // add other user fields if needed
+  },
+  pickup: "",
+  destination: "",
+  fare: 0,
+  status: "", // e.g. "pending"
+});
+
 
   const navigate = useNavigate();
-  const {captain } = useContext(CaptainDataContext);
+  const { captain } = useContext(CaptainDataContext);
+  const { socket } = useContext(SocketContext);
 
-  const rideDetails = {
-    pickup: "21, MG Road, Bangalore",
-    drop: "12, Residency Road, Bangalore",
-    fare: 250,
-    distance: 5.2,
-    customer: "Rahul Sharma",
-  };
+  useEffect(() => {
+    if (captain?.captain?._id) {
+      socket.emit("join", {
+        userId: captain.captain._id,
+        userType: "captain",
+      });
+    }
+
+    const updateLocation = () => {
+      if (navigator.geolocation && captain?.captain?._id) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+
+            console.log(captain.captain._id, latitude, longitude);
+
+            socket.emit("update-location-captain", {
+              userId: captain.captain._id,
+              location: {
+                ltd: latitude,
+                lng: longitude,
+              },
+            });
+          },
+          (error) => {
+            console.error("Error getting location:", error);
+          }
+        );
+      }
+    };
+
+    const intervalId = setInterval(updateLocation, 10000);
+    updateLocation();
+
+    return () => clearInterval(intervalId);
+  }, [socket, captain?.captain?._id]);
+
+  useEffect(() => {
+    socket.on("new-ride", (data) => {
+      console.log(data);
+      setShowRideRequest(true);
+
+      setRide(data);
+      
+    });
+
+    return () => {
+      socket.off("new-ride");
+    };
+  }, [socket]);
+
+  // Handle if captain data is not ready yet
+  if (!captain?.captain) {
+    return <div className="h-screen flex items-center justify-center">Loading captain data...</div>;
+  }
+
+  // const rideDetails = {
+  //   pickup: "21, MG Road, Bangalore",
+  //   drop: "12, Residency Road, Bangalore",
+  //   fare: 250,
+  //   distance: 5.2,
+  //   customer: "Rahul Sharma",
+  // };
+  // console.log("this is the ride state")
+  // console.log(ride);
 
   const stats = {
-    name: (captain.captain.fullname.firstname) + " " + captain.captain.fullname.lastname,
+    name: `${captain.captain.fullname?.firstname ?? "Captain"} ${captain.captain.fullname?.lastname ?? ""}`,
     earnings: "₹1,450.00",
     online1: "4.2",
     online2: "4.2",
@@ -35,7 +110,6 @@ const CaptainLanding = () => {
   return (
     <div className="h-screen font-sans bg-[#f9fafb] text-black flex flex-col">
       {/* Top Map Area */}
-      {console.log(captain.captain.fullname.firstname)}
       <div className="relative h-[60%] w-full bg-gray-200">
         {/* Header */}
         <div className="absolute top-0 left-0 right-0 px-4 py-3 flex items-center justify-between z-10">
@@ -66,11 +140,11 @@ const CaptainLanding = () => {
               <img
                 className="h-10 w-10 rounded-full"
                 src="https://randomuser.me/api/portraits/men/32.jpg"
-                alt=""
+                alt="Captain"
               />
             </div>
             <div>
-              <p className="text-lg font-semibold text-transform : capitalize">{stats.name}</p>
+              <p className="text-lg font-semibold capitalize">{stats.name}</p>
               <span className="text-xs text-green-500 font-medium">
                 Online ●
               </span>
@@ -108,13 +182,13 @@ const CaptainLanding = () => {
         onAccept={() => {
           setShowRideRequest(false);
           console.log("Ride Accepted");
-          navigate('/captain-riding');
+          navigate("/captain-riding");
         }}
         onIgnore={() => {
           setShowRideRequest(false);
           console.log("Ride Ignored");
-        }}
-        rideDetails={rideDetails}
+        }}  
+        rideDetails={ride}
       />
     </div>
   );

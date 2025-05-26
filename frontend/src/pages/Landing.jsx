@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 import { SocketContext } from '../context/SocketContext';
+import { useContext } from 'react';
+import { UserDataContext } from '../context/UserContext';
 
 // const rideOptions = [
 //     {
@@ -71,13 +73,19 @@ const Landing = () => {
     const [destinationSuggestions, setDestinationSuggestions] = useState([]);
     const [focusedInput, setFocusedInput] = useState(null);
 
-    const { sendMessage , receiveMessage } = React.useContext(SocketContext);
+    const { socket } = React.useContext(SocketContext);
+    const {user} = React.useContext(UserDataContext);
 
     useEffect(() => {
-      
+
     
-      sendMessage("join" , {userType : "User" , userId : localStorage.getItem('userId')})
-    }, [third])
+      
+    console.log(user);
+    if(user != null){
+
+        socket.emit   ("join" , {userType : "User" , userId : user._id })
+    }
+    }, [user , socket])
     
 
     // Helper to fetch suggestions
@@ -306,7 +314,7 @@ const handleRideSelect = (ride) => {
                     >
                         Find Ride <ArrowRight className="w-5 h-5" />
                     </button>
-                </form>
+                </form> 
             </div>
 
             {/* Quick Access Form */}

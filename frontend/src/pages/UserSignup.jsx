@@ -1,4 +1,4 @@
-import React, { useState , useContext , createContext } from 'react';
+import React, { useState , useContext , createContext , useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { UserDataContext } from '../context/UserContext.jsx';
@@ -12,6 +12,11 @@ const UserSignup = () => {
   const {user , setUser} = useContext(UserDataContext)
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+  console.log("User context updated:", user);
+}, [user]);
+
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -29,7 +34,9 @@ const UserSignup = () => {
         const data = response.data;
 
         setUser(data)
-                    localStorage.setItem("token" , data.token);
+        localStorage.setItem("token" , data.token);
+
+        console.log(user);
 
 
 

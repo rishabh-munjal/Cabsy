@@ -41,6 +41,7 @@ export const getDistanceTime = async (origin, destination) => {
             throw new Error('Unable to fetch distance and time');
         }
     } catch (err) {
+        console.log("hellow")
         console.error(err);
         throw err;
     }
@@ -70,7 +71,7 @@ export const getAutoCompleteSuggestions = async (input) => {
 };
 
 export const getCaptainsInTheRadius = async (ltd, lng, radius) => {
-    const captains = await captainModel.find({
+    const captains = await Captain.find({
         location: {
             $geoWithin: {
                 $centerSphere: [[ltd, lng], radius / 6371]  // radius in km
@@ -80,3 +81,4 @@ export const getCaptainsInTheRadius = async (ltd, lng, radius) => {
 
     return captains;
 };
+

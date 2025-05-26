@@ -35,18 +35,18 @@ const RideRequestModal = ({ visible, onAccept, onIgnore, rideDetails }) => {
           <div className="space-y-3 text-gray-700">
             <div className="flex items-center gap-3">
               <FaUser className="text-gray-500" />
-              <span>{rideDetails.customer}</span>
+              <span>{rideDetails.user.firstname}</span>
             </div>
             <div className="flex items-center gap-3">
               <FaMapMarkerAlt className="text-emerald-500" />
-              <span>{rideDetails.pickup}</span>
+              <span>{rideDetails.pickup} → {rideDetails.destination}</span>
             </div>
             <div className="flex items-center gap-3">
               <FaMoneyBillWave className="text-green-500" />
-              <span>₹{rideDetails.fare}</span>
+              <span>₹{rideDetails.fare.toFixed(2)}</span>
             </div>
             <div className="flex justify-between text-sm text-gray-500 mt-1">
-              <span>Distance: {rideDetails.distance} km</span>
+              <span>Distance: 5 km</span>
               <span>ETA: {rideDetails.eta || "5 min"}</span>
             </div>
           </div>
