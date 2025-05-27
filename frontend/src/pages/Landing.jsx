@@ -9,6 +9,7 @@ import axios from 'axios';
 import { SocketContext } from '../context/SocketContext';
 import { useContext } from 'react';
 import { UserDataContext } from '../context/UserContext';
+import { RideDataContext } from '../context/RideContext';
 
 
 // const rideOptions = [
@@ -85,6 +86,7 @@ const Landing = () => {
 
     const { socket } = React.useContext(SocketContext);
     const { user } = React.useContext(UserDataContext);
+    const {ride , setRide} = React.useContext(RideDataContext);
 
     useEffect(() => {
 
@@ -213,6 +215,7 @@ const Landing = () => {
         socket.on('ride-confirmed', (data) => {
         console.log(data);
         setFindingDriver(false);
+        setRide(data);
         setDriverAssigned(data);
         
     })
@@ -427,7 +430,7 @@ const Landing = () => {
                         </div>
                         
                         <div className="flex items-center gap-4 mb-4">
-                            <img src={driverAssigned.image} alt="Driver" className="w-16 h-16 rounded-full" />
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Driver" className="w-16 h-16 rounded-full" />
                             <div>
                                 <h3 className="text-lg font-semibold">{driverAssigned?.captain.fullname.firstname}</h3>
                                 <p className="text-gray-600 text-sm">⭐ 4.6 Rating</p>
