@@ -5,7 +5,8 @@ import { RideDataContext } from '../context/RideContext';
 import {SocketContext} from '../context/SocketContext';
 import { useEffect , useContext } from 'react';
 import {useNavigate} from 'react-router-dom';
-import LiveTracking from '../components/LiveTraking';
+import LiveTracking from '../components/LiveTracking';
+import { LogOut } from 'lucide-react';
 
 const Riding = () => {
     // const rideDetails = {
@@ -33,21 +34,28 @@ const Riding = () => {
     return (
         <div className="relative h-screen w-full bg-gray-100">
             {/* Top Bar */}
-            <div className="absolute top-0 w-full flex justify-between items-baseline p-4 z-10">
-                <h1 style={{ fontFamily: 'Quantico, sans-serif' }} className='text-3xl text-black font-extrabold tracking-wide'>Cabsy</h1>
-                <button className="text-gray-800 font-medium px-3 py-1 rounded-md border border-gray-300 hover:bg-gray-200 text-sm">
-                    Support
-                </button>
-            </div>
+            {/* Header */}
+                  <header className="p-6 shadow-md bg-white flex items-center justify-between z-20 relative">
+                                        <h1 style={{ fontFamily: 'Quantico, sans-serif' }} className="text-3xl text-black font-extrabold tracking-wide">Cabsy</h1>
+                                        <button
+                                            className="flex items-center gap-2 px-4 py-2 border font-semibold text-black rounded-lg hover:bg-red-700 hover:text-white transition"
+                                        >
+                                            <LogOut className="w-5 h-5" />
+                                            Logout
+                                        </button>
+                                    </header>
 
             {/* Map Placeholder */}
-            <div className="h-[63%] w-full bg-grey-300 m-0 flex items-center justify-center text-gray-700">
+            <div className="h-[40%] bg-grey-300 m-4 text-gray-700">
                 {/* Replace with actual Google Map */}
+                
+
                 <LiveTracking />
+                
             </div>
 
             {/* Bottom Sheet */}
-            <div className="absolute bottom-0 left-0 w-full m-0 bg-white  shadow-lg p-6">
+            <div className="m-4  rounded-xl    bg-white  shadow-lg p-6">
                 {/* Driver Info */}
                 <div className="flex items-center gap-4 mb-5">
                     <img

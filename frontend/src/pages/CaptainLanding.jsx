@@ -11,7 +11,7 @@ import { CaptainDataContext } from "../context/CaptainContext";
 import { SocketContext } from "../context/SocketContext";
 import { RideDataContext } from "../context/RideContext";
 import axios from 'axios'
-import LiveTracking from "../components/LiveTraking";
+import LiveTracking from "../components/LiveTracking";
 
 const CaptainLanding = () => {
   const [showRideRequest, setShowRideRequest] = useState(false);
@@ -98,32 +98,28 @@ const CaptainLanding = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200 flex flex-col">
       {/* Header */}
-      <header className="flex items-center justify-between px-6 py-4 bg-white shadow-sm">
-        <h1 className="text-2xl font-bold tracking-wide text-[#2d2d2d] font-quantico">Cabsy</h1>
-        <button
-          className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg shadow transition"
-          onClick={() => {
-            localStorage.removeItem("token");
-            navigate("/login");
-          }}
-        >
-          <LogOut className="w-5 h-5" />
-          Logout
-        </button>
-      </header>
+      <header className="p-6 shadow-md bg-white flex items-center justify-between z-20 relative">
+                      <h1 style={{ fontFamily: 'Quantico, sans-serif' }} className="text-3xl text-black font-extrabold tracking-wide">Cabsy</h1>
+                      <button
+                          className="flex items-center gap-2 px-4 py-2 border font-semibold text-black rounded-lg hover:bg-red-700 hover:text-white transition"
+                      >
+                          <LogOut className="w-5 h-5" />
+                          Logout
+                      </button>
+                  </header>
 
       {/* Map Section */}
       <section className="flex-1 relative">
-        <div className="absolute inset-0">
+        <div className="absolute  m-4 inset-0">
           <LiveTracking />
-        </div>
+                </div>
         {/* Overlay for subtle darkening */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-gray-100 opacity-80 pointer-events-none" />
+        
       </section>
 
       {/* Bottom Card */}
       <section className="relative z-10">
-        <div className="max-w-2xl mx-auto -mt-16 pb-8 px-4">
+        <div className="w-full mx-auto mt-2 pb-2 px-4">
           <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
             {/* Profile and Earnings */}
             <div className="flex justify-between items-center mb-6">

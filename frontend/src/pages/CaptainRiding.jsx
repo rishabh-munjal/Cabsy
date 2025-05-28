@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { RideDataContext } from '../context/RideContext';
 import axios from "axios";
-import LiveTracking from "../components/LiveTraking";
+import LiveTracking from "../components/LiveTracking";
 
 const CaptainRiding = () => {
   const [rideStarted, setRideStarted] = useState(false);
@@ -59,22 +59,24 @@ const CaptainRiding = () => {
   return (
     <div className="h-screen w-full font-sans bg-[#f9fafb] text-black flex flex-col">
       {/* Header */}
-      <div className="absolute top-0 left-0 right-0 px-4 py-3 flex items-center justify-between z-10">
-        <h1 className="text-2xl font-bold tracking-wide" style={{ fontFamily: "Quantico, sans-serif" }}>
-          Cabsy
-        </h1>
-        <button className="flex items-center gap-2 px-3 py-1.5 border border-gray-300 bg-red-700 text-white text-sm font-medium rounded-md hover:bg-red-800 transition">
-          <LogOut className="w-4 h-4" />
-          Logout
-        </button>
-      </div>
+      <header className="p-6 shadow-md bg-white flex items-center justify-between z-20 relative">
+                            <h1 style={{ fontFamily: 'Quantico, sans-serif' }} className="text-3xl text-black font-extrabold tracking-wide">Cabsy</h1>
+                            <button
+                                className="flex items-center gap-2 px-4 py-2 border font-semibold text-black rounded-lg hover:bg-red-700 hover:text-white transition"
+                            >
+                                <LogOut className="w-5 h-5" />
+                                Logout
+                            </button>
+                        </header>
 
       {/* Map */}
-      <div className="flex-1 bg-gray-200 relative">
-        <div className="h-full w-full flex items-center justify-center text-gray-500 italic text-sm">
+      <section className="flex-1 relative">
+        <div className="absolute  m-4 inset-0">
           <LiveTracking />
-        </div>
-      </div>
+                </div>
+        {/* Overlay for subtle darkening */}
+        
+      </section>
 
       {/* Ride Info Card */}
       <div className="bg-white px-6 py-6 shadow-xl ">

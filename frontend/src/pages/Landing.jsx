@@ -11,7 +11,7 @@ import { useContext } from 'react';
 import { UserDataContext } from '../context/UserContext';
 import { RideDataContext } from '../context/RideContext';
 import { useNavigate } from 'react-router-dom';
-import LiveTracking from '../components/LiveTraking';
+import LiveTracking from '../components/LiveTracking';
 
 
 
@@ -251,7 +251,7 @@ const Landing = () => {
             </header>
 
             {/* Map Section */}
-            <div className={`transition-all duration-300 mt-4 mx-4 ${showFormFull ? 'h-0 opacity-0' : 'h-122 md:h-122 opacity-100'} bg-gray-300 rounded-lg flex items-center justify-center text-gray-600 font-medium shadow-lg`}>
+            <div className={`transition-all duration-300 mt-4 mx-4 ${showFormFull ? 'h-0 opacity-0' : 'h-108 md:h-122 opacity-100'} bg-gray-300 rounded-xl flex items-center justify-center text-gray-600 font-medium shadow-lg`}>
                 <LiveTracking />
             </div>
 
