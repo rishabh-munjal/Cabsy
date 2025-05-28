@@ -5,13 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { RideDataContext } from '../context/RideContext';
 import axios from "axios";
+import LiveTracking from "../components/LiveTraking";
 
 const CaptainRiding = () => {
   const [rideStarted, setRideStarted] = useState(false);
   const [otpVerified, setOtpVerified] = useState(false);
   const [otpInput, setOtpInput] = useState("");
 
-  const { captainRide  } = useContext(RideDataContext);
+  const { captainRide } = useContext(RideDataContext);
 
   const navigate = useNavigate();
 
@@ -22,37 +23,37 @@ const CaptainRiding = () => {
     eta: "15 min",
   };
 
-const verifyOtp = async (e) => {
-  e.preventDefault();
+  const verifyOtp = async (e) => {
+    e.preventDefault();
 
-  console.log(captainRide);
+    console.log(captainRide);
 
-  console.log(typeof(otpInput))
+    console.log(typeof (otpInput))
 
-  try {
-    const response = await axios.get(
-      `${import.meta.env.VITE_BASE_URL}/api/ride/start-ride`,
-      {
-        params: {
-          rideId: captainRide._id,
-          otp: otpInput,
-        },
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/api/ride/start-ride`,
+        {
+          params: {
+            rideId: captainRide._id,
+            otp: otpInput,
+          },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        setOtpVerified(true);
+        setRideStarted(true);
+        setOtpInput("");
       }
-    );
-
-    if (response.status === 200) {
-      setOtpVerified(true);
-      setRideStarted(true);
-      setOtpInput("");
+    } catch (err) {
+      console.error("OTP verification failed", err);
+      alert("Failed to verify OTP");
     }
-  } catch (err) {
-    console.error("OTP verification failed", err);
-    alert("Failed to verify OTP");
-  }
-};
+  };
 
 
   return (
@@ -71,7 +72,7 @@ const verifyOtp = async (e) => {
       {/* Map */}
       <div className="flex-1 bg-gray-200 relative">
         <div className="h-full w-full flex items-center justify-center text-gray-500 italic text-sm">
-          Map loading...
+          <LiveTracking />
         </div>
       </div>
 
@@ -136,14 +137,35 @@ const verifyOtp = async (e) => {
               <span>ETA: {rideInfo.eta}</span>
             </div>
             <button
-              onClick={() => {
+              onClick={async () => {
                 setRideStarted(false);
                 setOtpVerified(false);
                 setOtpInput("");
-                alert("Ride Completed");
-                navigate("/captain-landing");
-                
+
+                let response; // ✅ Declare here so it's accessible later
+
+                try {
+                  response = await axios.post(
+                    `${import.meta.env.VITE_BASE_URL}/api/ride/end-ride`,
+                    {
+                      rideId: captainRide._id,
+                    },
+                    {
+                      headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                      },
+                    }
+                  );
+                } catch (error) {
+                  console.error("Error ending ride:", error);
+                }
+
+                if (response && response.status === 200) {
+                  alert("Ride Completed");
+                  navigate("/captain-landing");
+                }
               }}
+
               className="w-full bg-red-600 text-white py-3 rounded-md font-semibold hover:bg-red-700 transition"
             >
               Finish Ride

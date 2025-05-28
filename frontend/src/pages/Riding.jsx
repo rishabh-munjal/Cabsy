@@ -2,7 +2,10 @@ import React from 'react';
 import taxiIcon from '../assets/taxi.png'; // Replace with your taxi icon path
 import { FaMapMarkerAlt, FaMoneyBillAlt, FaCarAlt, FaPhoneAlt } from 'react-icons/fa';
 import { RideDataContext } from '../context/RideContext';
-import { useContext } from 'react';
+import {SocketContext} from '../context/SocketContext';
+import { useEffect , useContext } from 'react';
+import {useNavigate} from 'react-router-dom';
+import LiveTracking from '../components/LiveTraking';
 
 const Riding = () => {
     // const rideDetails = {
@@ -18,8 +21,14 @@ const Riding = () => {
     // };
 
     const { ride, setRide } = useContext(RideDataContext);
+    const { socket } = useContext(SocketContext);
+    const navigate = useNavigate();
 
     console.log("This is Context of Ride", ride);
+
+    socket.on('ride-ended' , () => {
+        navigate('/landing')
+    })
 
     return (
         <div className="relative h-screen w-full bg-gray-100">
@@ -34,7 +43,7 @@ const Riding = () => {
             {/* Map Placeholder */}
             <div className="h-[63%] w-full bg-grey-300 m-0 flex items-center justify-center text-gray-700">
                 {/* Replace with actual Google Map */}
-                <p>Live Map Tracking...</p>
+                <LiveTracking />
             </div>
 
             {/* Bottom Sheet */}
