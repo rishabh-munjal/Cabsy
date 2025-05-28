@@ -10,6 +10,7 @@ dotenv.config();
 export const authUser = async (req, res, next) => {
     const token = req.headers["authorization"]?.split(" ")[1] || req.cookies.token;
 
+
     if(!token){
         return res.status(401).json({message : "Unauthorized"});
     }else{
@@ -20,7 +21,11 @@ export const authUser = async (req, res, next) => {
                 return res.status(401).json({ message: "Unauthorized" });
             }
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+            console.log("DECODED USER", decoded);
             req.user = await User.findById(decoded._id).select("-password");//req me user ki details attach karde
+
+            console.log("USER MIDDEWARE", req.user);
             
             return next();
         } catch (error) {
@@ -42,8 +47,9 @@ export const authCaptain = async (req , res , next) => {
             }
     
             const decoded = jwt.verify(token , process.env.JWT_SECRET);
-            console.log("CAPTAIN MIDDEWARE",  await Captain.findById(decoded._id).select("-password"))
+            console.log("DECODED CAPTAIN", decoded);
             req.captain = await Captain.findById(decoded._id).select("-password");
+            console.log("CAPTAIN MIDDEWARE", req.captain);
 
             return next();
             

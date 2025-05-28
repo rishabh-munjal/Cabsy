@@ -1,4 +1,4 @@
-import React, { useEffect, useState , } from 'react';
+import React, { useEffect, useState, } from 'react';
 import { MapPin, ArrowRight, LogOut, X, UserRound } from 'lucide-react';
 import taxiIcon from '../assets/taxi.png';
 import motoIcon from '../assets/moto.png';
@@ -113,12 +113,16 @@ const Landing = () => {
             return;
         }
         try {
+
+            const token = localStorage.getItem("token");
+            if (!token) return;
             const res = await axios.get(
                 `${import.meta.env.VITE_BASE_URL}/api/maps/get-suggestions`,
                 {
                     params: { input },
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
+                        'Cache-Control': 'no-cache',
                     },
                 }
             );
@@ -224,7 +228,7 @@ const Landing = () => {
 
     })
 
-    socket.on('ride-started' , (data) => {
+    socket.on('ride-started', (data) => {
         setFindingDriver(false);
         setRide(data);
         navigate('/riding');

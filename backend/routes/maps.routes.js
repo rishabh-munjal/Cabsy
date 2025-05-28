@@ -8,20 +8,22 @@ import { query } from 'express-validator';
 const router = express.Router();
 
 
-router.get('/get-coordinates' , [query('address').isString().isLength({min : 3})], authUser , getCoordinates);
+router.get('/get-coordinates' ,authUser , [query('address').isString().isLength({min : 3})],  getCoordinates);
 
 router.get('/get-distance-time' ,  
+    authUser,
     query('origin').isString().isLength({min : 3}),
     query('destination').isString().isLength({min:3}),
-    authUser,
     getDistanceTimeController
  )
 
-router.get('/get-suggestions' ,
-    query('input').isString(),
-    authUser,
-    getSuggestions
-)
+router.get(
+  '/get-suggestions',
+  authUser, // first
+  query('input').isString(), // second
+  getSuggestions // finally
+);
+
 
 
 export default router;
