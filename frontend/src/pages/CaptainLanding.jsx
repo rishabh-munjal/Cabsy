@@ -10,12 +10,14 @@ import RideRequestModal from "../components/RideRequestModal";
 import { useNavigate } from "react-router-dom";
 import { CaptainDataContext } from "../context/CaptainContext";
 import { SocketContext } from "../context/SocketContext";
+import { RideDataContext } from "../context/RideContext";
 import axios from 'axios'
 
 const CaptainLanding = () => {
   const [showRideRequest, setShowRideRequest] = useState(false);
 
-  const [ride, setRide] = React.useState({
+  const {captainRide , setCaptainRide} = useContext(RideDataContext);
+    const [ride, setRide] = React.useState({
     _id: "",
     user: {
       _id: "",
@@ -197,6 +199,7 @@ const CaptainLanding = () => {
               },
             });
             console.log("Response:", response);
+            setCaptainRide(response.data);
             navigate("/captain-riding");
           } catch (error) {
             console.error("Error confirming ride:", error.response?.data || error.message);

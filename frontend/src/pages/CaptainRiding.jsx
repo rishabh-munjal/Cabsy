@@ -2,11 +2,16 @@ import React, { useState } from "react";
 import { LogOut } from "lucide-react";
 import { FaMapMarkerAlt, FaRoute, FaClock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { RideDataContext } from '../context/RideContext';
+import axios from "axios";
 
 const CaptainRiding = () => {
   const [rideStarted, setRideStarted] = useState(false);
   const [otpVerified, setOtpVerified] = useState(false);
   const [otpInput, setOtpInput] = useState("");
+
+  const { captainRide  } = useContext(RideDataContext);
 
   const navigate = useNavigate();
 
@@ -17,14 +22,38 @@ const CaptainRiding = () => {
     eta: "15 min",
   };
 
-  const verifyOtp = () => {
-    if (otpInput === rideInfo.otp) {
+const verifyOtp = async (e) => {
+  e.preventDefault();
+
+  console.log(captainRide);
+
+  console.log(typeof(otpInput))
+
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_BASE_URL}/api/ride/start-ride`,
+      {
+        params: {
+          rideId: captainRide._id,
+          otp: otpInput,
+        },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+
+    if (response.status === 200) {
       setOtpVerified(true);
-      alert("OTP Verified");
-    } else {
-      alert("Invalid OTP");
+      setRideStarted(true);
+      setOtpInput("");
     }
-  };
+  } catch (err) {
+    console.error("OTP verification failed", err);
+    alert("Failed to verify OTP");
+  }
+};
+
 
   return (
     <div className="h-screen w-full font-sans bg-[#f9fafb] text-black flex flex-col">

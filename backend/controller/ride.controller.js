@@ -1,6 +1,6 @@
 import { createRide } from "../services/ride.service.js";
 import { validationResult } from "express-validator";
-import { getFare , confirmRide } from "../services/ride.service.js";
+import { getFare , confirmRide , startRide} from "../services/ride.service.js";
 import {
   getAddressCoordinate,
   getCaptainsInTheRadius,
@@ -106,7 +106,9 @@ export const confirmRideController = async (req, res) => {
 
         const ride = await confirmRide(rideId , req.captain._id);
 
-        sendMessageToSocketId(ride.user.socketId , {
+        //console.log("Ride confirmed:", ride);
+
+        sendMessageToSocketId(ride.user.socketId ,{
             event : "ride-confirmed",
             data : ride
         })
@@ -119,4 +121,33 @@ export const confirmRideController = async (req, res) => {
         return res.status(500).json({message : "Internal Server Error"});
         
     }
+}
+
+
+export const startRideController = async (req , res)=>{
+
+  const error = validationResult(req);
+  if(!error.isEmpty()){
+    return res.status(400).json({error : error.array()});
+  }
+
+  const {rideId , otp} = req.query;
+
+  try {
+
+    const ride = await startRide(rideId , otp , req.captain)
+    sendMessageToSocketId(ride.user.socketId , {
+      event : "ride-started",
+      data : ride
+    });
+
+    return res.status(200).json(ride);
+    
+  }
+  catch (error) {
+
+    return res.status(500).json({message : error.message});
+    
+  }
+
 }

@@ -74,7 +74,7 @@ const Riding = () => {
                         <div className="flex items-center gap-3 mb-6">
                             <FaMoneyBillAlt />
                             <p className="text-sm font-medium text-gray-700">
-                                {ride.fare} <span className="text-gray-500">Cash</span>
+                                {ride.fare.toFixed(2)} <span className="text-gray-500">Cash</span>
                             </p>
                         </div>
                     </div>

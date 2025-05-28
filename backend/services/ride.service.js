@@ -1,4 +1,5 @@
 import { Ride } from "../models/ride.model.js";
+import { sendMessageToSocketId } from "../socket.js";
 import { getDistanceTime } from "./maps.service.js";
 import crypto from 'crypto';
 
@@ -94,4 +95,49 @@ export const confirmRide = async(rideId , captainId) => {
     }
 
     return ride;
+}
+
+export const startRide = async(rideId , otp, captain) => {
+
+    //console.log("Starting ride with ID:", rideId, "and OTP:", otp);
+    //console.log("Captain:", captain);
+    
+    if(!rideId ){
+        throw new Error("Ride ID,n are required");
+    }
+
+    if(!otp){
+        throw new Error("OTP is required");
+
+    }
+
+    if(!captain || !captain._id){
+        throw new Error("Captain is required");
+    }
+
+    const ride = await Ride.findOne({_id : rideId}).populate('user').populate('captain').select('+otp')
+
+    if(!ride){
+        throw new Error('Ride not fount');
+    }
+
+    if(ride.status !== 'accepted'){
+        throw new Error('Ride not accepted')
+    }
+
+    if(ride.otp != otp){
+        throw new Error('Invalid OTP')
+    }
+
+    await Ride.findOneAndUpdate({_id : rideId} , {
+        status : 'ongoing'
+    })
+
+    sendMessageToSocketId(ride.user.socketId , {
+        event: 'ride-started',
+        data : ride
+    })
+
+    return ride;
+
 }

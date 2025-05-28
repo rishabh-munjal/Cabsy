@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState , } from 'react';
 import { MapPin, ArrowRight, LogOut, X, UserRound } from 'lucide-react';
 import taxiIcon from '../assets/taxi.png';
 import motoIcon from '../assets/moto.png';
@@ -10,6 +10,8 @@ import { SocketContext } from '../context/SocketContext';
 import { useContext } from 'react';
 import { UserDataContext } from '../context/UserContext';
 import { RideDataContext } from '../context/RideContext';
+import { useNavigate } from 'react-router-dom';
+
 
 
 // const rideOptions = [
@@ -37,6 +39,7 @@ import { RideDataContext } from '../context/RideContext';
 // ];
 
 const Landing = () => {
+    const navigate = useNavigate();
     const [source, setSource] = useState('');
     const [destination, setDestination] = useState('');
     const [showFormFull, setShowFormFull] = useState(false);
@@ -70,14 +73,14 @@ const Landing = () => {
     const [selectedRide, setSelectedRide] = useState(null);
 
     //Ride options
-        //     name: 'Rahul Singh',
-        // vehicle: rideOptions.type,
-        // price: rideOptions.price,
-        // numberPlate: 'DL3CAX1234',
-        // phone: '+91 9876543210',
-        // rating: '4.8',
-        // image: 'https://randomuser.me/api/portraits/men/32.jpg',
-    
+    //     name: 'Rahul Singh',
+    // vehicle: rideOptions.type,
+    // price: rideOptions.price,
+    // numberPlate: 'DL3CAX1234',
+    // phone: '+91 9876543210',
+    // rating: '4.8',
+    // image: 'https://randomuser.me/api/portraits/men/32.jpg',
+
 
     // NEW: Suggestion states
     const [sourceSuggestions, setSourceSuggestions] = useState([]);
@@ -86,7 +89,7 @@ const Landing = () => {
 
     const { socket } = React.useContext(SocketContext);
     const { user } = React.useContext(UserDataContext);
-    const {ride , setRide} = React.useContext(RideDataContext);
+    const { ride, setRide } = React.useContext(RideDataContext);
 
     useEffect(() => {
 
@@ -212,19 +215,25 @@ const Landing = () => {
 
     };
 
-        socket.on('ride-confirmed', (data) => {
+    socket.on('ride-confirmed', (data) => {
         console.log(data);
         setFindingDriver(false);
         setRide(data);
         setDriverAssigned(data);
-        
+
+    })
+
+    socket.on('ride-started' , (data) => {
+        setFindingDriver(false);
+        setRide(data);
+        navigate('/riding');
     })
 
     useEffect(() => {
-  if (driverAssigned) {
-    console.log("DRIVER ASSIGNED" , driverAssigned);
-  }
-}, [driverAssigned]);
+        if (driverAssigned) {
+            console.log("DRIVER ASSIGNED", driverAssigned);
+        }
+    }, [driverAssigned]);
 
     return (
         <div className="min-h-screen w-full bg-gradient-to-br from-gray-50 to-gray-200 relative overflow-hidden">
@@ -428,7 +437,7 @@ const Landing = () => {
                                 <X className="w-5 h-5 text-gray-500 hover:text-black" />
                             </button>
                         </div>
-                        
+
                         <div className="flex items-center gap-4 mb-4">
                             <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Driver" className="w-16 h-16 rounded-full" />
                             <div>
