@@ -25,7 +25,7 @@ const Riding = () => {
     const { socket } = useContext(SocketContext);
     const navigate = useNavigate();
 
-    console.log("This is Context of Ride", ride);
+    //console.log("This is Context of Ride", ride);
 
     socket.on('ride-ended' , () => {
         navigate('/landing')

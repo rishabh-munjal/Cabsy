@@ -96,7 +96,7 @@ const Landing = () => {
 
 
 
-        console.log(user);
+        //console.log(user);
         if (user != null) {
 
             socket.emit("join", { userType: "User", userId: user._id })
@@ -159,7 +159,7 @@ const Landing = () => {
                 }
             });
 
-            console.log(fare.data);
+            //console.log(fare.data);
 
             // Update ride options with correct price from fare data
             setRideOptions((prevOptions) =>
@@ -221,7 +221,7 @@ const Landing = () => {
     };
 
     socket.on('ride-confirmed', (data) => {
-        console.log(data);
+        //console.log(data);
         setFindingDriver(false);
         setRide(data);
         setDriverAssigned(data);
@@ -236,7 +236,7 @@ const Landing = () => {
 
     useEffect(() => {
         if (driverAssigned) {
-            console.log("DRIVER ASSIGNED", driverAssigned);
+            //console.log("DRIVER ASSIGNED", driverAssigned);
         }
     }, [driverAssigned]);
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Routes , Route } from 'react-router-dom'
 import Home from './pages/Home.jsx'
-import Userlogin from './pages/Userlogin.jsx'
+
 import UserSignup from './pages/UserSignup.jsx'
 import CaptainLogin from './pages/CaptainLogin.jsx'
 import CaptainSignup from './pages/CaptainSignup.jsx'
@@ -12,6 +12,7 @@ import CaptainLanding from './pages/CaptainLanding.jsx'
 import CaptainProtectionWrapper from './pages/CaptainProtectionWrapper.jsx'
 import Riding from './pages/Riding.jsx'
 import CaptainRiding from './pages/CaptainRiding.jsx'
+import Userlogin from './pages/userlogin.jsx'
 
 const App = () => {
   return (

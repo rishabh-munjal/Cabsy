@@ -26,9 +26,9 @@ const CaptainRiding = () => {
   const verifyOtp = async (e) => {
     e.preventDefault();
 
-    console.log(captainRide);
+    //console.log(captainRide);
 
-    console.log(typeof (otpInput))
+    //console.log(typeof (otpInput))
 
     try {
       const response = await axios.get(

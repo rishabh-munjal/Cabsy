@@ -14,7 +14,7 @@ const UserSignup = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-  console.log("User context updated:", user);
+  //console.log("User context updated:", user);
 }, [user]);
 
 
@@ -36,7 +36,7 @@ const UserSignup = () => {
         setUser(data)
         localStorage.setItem("token" , data.token);
 
-        console.log(user);
+        //console.log(user);
 
 
 
@@ -44,7 +44,7 @@ const UserSignup = () => {
 
     }
 
-    console.log('User Signup Data:', newUser);
+    //console.log('User Signup Data:', newUser);
 
     // Reset
     setFirstname('');
