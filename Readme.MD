@@ -63,13 +63,19 @@ A full-stack ride-hailing platform inspired by Uber, built with React, Node.js, 
 
 ## 🖼️ Screenshots
 
-<img src="./media/media (1).png" width="200" />
-<img src="./media/media (2).png" width="200" />
-<img src="./media/media (3).png" width="200" />
-<img src="./media/media (4).png" width="200" />
-<img src="./media/media (5).png" width="200" />
-<img src="./media/media (6).png" width="200" />
+<div align="center">
+  <img src="./media/media (1).png" width="200" />
+  <img src="./media/media (2).png" width="200" />
+  <img src="./media/media (3).png" width="200" />
+</div>
 
+<br/>
+
+<div align="center">
+  <img src="./media/media (4).png" width="200" />
+  <img src="./media/media (5).png" width="200" />
+  <img src="./media/media (6).png" width="200" />
+</div>
 
 ---
 
