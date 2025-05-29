@@ -195,7 +195,7 @@ const Landing = () => {
 
         try {
             const response = await axios.post(
-                `${import.meta.env.VITE_BASE_URL}/api/ride/create`,
+               `${import.meta.env.VITE_BASE_URL}/api/ride/create`,
                 {
                     pickup: source,
                     destination: destination,
@@ -207,7 +207,7 @@ const Landing = () => {
                     }
                 }
             );
-
+ 
 
 
 

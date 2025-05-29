@@ -24,6 +24,8 @@ export const authUser = async (req, res, next) => {
 
             console.log("DECODED USER", decoded);
             req.user = await User.findById(decoded._id).select("-password");//req me user ki details attach karde
+            // const testuser = await User.findById(decoded._id);
+            // console.log("RAW USER:", testuser);
 
             console.log("USER MIDDEWARE", req.user);
             
