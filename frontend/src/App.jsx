@@ -12,7 +12,7 @@ import CaptainLanding from './pages/CaptainLanding.jsx'
 import CaptainProtectionWrapper from './pages/CaptainProtectionWrapper.jsx'
 import Riding from './pages/Riding.jsx'
 import CaptainRiding from './pages/CaptainRiding.jsx'
-import Userlogin from './pages/userlogin.jsx'
+import Userlogin from './pages/Userlogin.jsx'
 
 const App = () => {
   return (
